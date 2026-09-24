@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jrocai-comic-factory",
+  "main": "src/server.ts",
+  "compatibility_date": "2026-09-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "REPLACE_WITH_YOUR_HYPERDRIVE_ID"
+    }
+  ],
+  "vars": {
+    "VITE_AUTH_ENABLED": "false",
+    "ENABLE_REMOTE_FALLBACK": "false",
+    "MOCKUPS_ENABLED": "false"
+  }
+}

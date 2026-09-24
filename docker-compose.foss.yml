@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: jrocai
+      POSTGRES_PASSWORD: jrocai
+      POSTGRES_DB: jrocai
+    ports:
+      - "5432:5432"
+    volumes:
+      - jrocai-postgres:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - jrocai-ollama:/root/.ollama
+
+  comfyui:
+    image: ghcr.io/lecode-official/comfyui-docker:latest
+    restart: unless-stopped
+    ports:
+      - "8188:8188"
+    volumes:
+      - ./runtime/comfyui/models:/opt/comfyui/models:rw
+      - ./runtime/comfyui/custom_nodes:/opt/comfyui/custom_nodes:rw
+      - ./runtime/comfyui/input:/opt/comfyui/input:rw
+      - ./runtime/comfyui/output:/opt/comfyui/output:rw
+    profiles: ["gpu"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  jrocai-postgres:
+  jrocai-ollama:
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - ollama
+      - comfyui
+    environment:
+      DATABASE_URL: postgresql://jrocai:jrocai@postgres:5432/jrocai
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODELS: qwen2.5:7b-instruct
+      COMFYUI_URL: http://comfyui:8188
+      COMFYUI_CHECKPOINTS: sd_xl_base_1.0.safetensors
+      ENABLE_REMOTE_FALLBACK: "false"
+      MOCKUP_MODE: "false"
+    ports:
+      - "3000:3000"
+    profiles: ["gpu"]

@@ -1,31 +1,15 @@
-# Built things
-_Debug/
-Compiled/
+# Cloudflare / Wrangler
+.wrangler/
+.dev.vars
+.dev.vars.*
 
-# AudioCache can be rebuilt from sources
-AudioCache/
+# Local model/runtime state
+runtime/comfyui/models/
+runtime/comfyui/output/
+runtime/comfyui/input/
 
-# Lockfile
-_OpenInEditor.lock
+# Existing local artifacts
+.output/
 
-# User settings
-Game.agf.user
-*.crm.user
-
-# Backups
-Game.agf.bak
-backup_acsprset.spr
-
-# Memory dumps
-*.dmp
-
-# Temporary files
-# temporarily created during sprite or room background compression
-~aclzw.tmp
-# temporary, main game data, before getting packed into exe
-game28.dta
-# temporary build of the game before being moved to Compiled/ folder
-*.exe
-
-# Log files
-warnings.log
+# Node
+node_modules/
